@@ -90,6 +90,10 @@ Fasi7 translates files concurrently to improve performance when dealing with mul
 
 - Fasi7 relies on the OpenAI API, which may have usage limits and costs associated with it.
 - The quality of translations depends on the AI model used and the context provided.
+- It works with all the file structures, but the iso code has to be in the folder name not in the file name, as it works in this simple tasks
+    - Read all the not ignored files in the directory
+    - translate the content of the file
+    - write it to the same path with replacing the /[input iso code]/ with /[output iso code]/
 
 ## Contributing
 
