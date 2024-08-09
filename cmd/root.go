@@ -65,8 +65,10 @@ var rootCmd = &cobra.Command{
 
 		wg := sync.WaitGroup{}
 
+		inputFilesCount := 0
+		translatedFilesCount := 0
 		for _, file := range files {
-			if !strings.Contains(file, inputLocale) {
+			if !strings.Contains(file, fmt.Sprintf("/%s/", inputLocale)) {
 				continue
 			}
 
@@ -79,6 +81,8 @@ var rootCmd = &cobra.Command{
 			if utils.GetConfigString("ignoreFilesWithContent") != "" && strings.Contains(string(fileContent), utils.GetConfigString("ignoreFilesWithContent")) {
 				continue
 			}
+
+			inputFilesCount++
 
 			for _, outputLocale := range outputLocales {
 				wg.Add(1)
@@ -122,11 +126,13 @@ Business Description:
 						fmt.Println("Error:", err)
 						os.Exit(1)
 					}
+					translatedFilesCount++
 				}(fileContent, file, outputLocale)
 			}
 		}
 
 		wg.Wait()
+		fmt.Printf("Translated %d files from %d input files\n", translatedFilesCount, inputFilesCount)
 	},
 }
 
