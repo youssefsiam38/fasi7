@@ -1,0 +1,8 @@
+version: "3"
+
+tasks:
+    release-*:
+        vars:
+            TAG: "{{index .MATCH 0}}"
+        cmds:
+            - "git tag -a v{{.TAG}} -m \"New Release\" && goreleaser release --clean"
