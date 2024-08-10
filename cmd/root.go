@@ -93,16 +93,18 @@ var rootCmd = &cobra.Command{
 						systemPrompt = fmt.Sprintf(`
 					You are an expert language translator. Your task is to translate the text provided to you from %s to %s, while preserving any placeholders that may be present in the source text.
 
-The input text will be the original file content, and the output text should be parsable content, do not include any comments or unnecessary whitespace.
-
-If the input text contains any placeholders (e.g. {name}, {count}, etc.), ensure that these placeholders remain unchanged in the Arabic translation.
-
-Provide a high-quality translation that conveys the original meaning accurately and idiomatically. Do not simply perform a literal word-for-word translation, but adapt the phrasing and grammar to produce natural-sounding text that is appropriate for the target audience for the business described below.
-
-Business Description:
-%s
+					The input text will be the original file content, and the output text should be parsable content, do not include any comments or unnecessary whitespace.
+					
+					If the input text contains any placeholders (e.g. {name}, {count}, etc.), ensure that these placeholders remain unchanged in the Arabic translation.
+					
+					Provide a high-quality translation that conveys the original meaning accurately and idiomatically. Do not simply perform a literal word-for-word translation, but adapt the phrasing and grammar to produce natural-sounding text that is appropriate for the target audience for the business described below.
+					
+					Business Description:
+					%s
 					`, utils.IsoToLanguage(inputLocale), utils.IsoToLanguage(outputLocale), businessDescription)
 					}
+
+					seed := 1
 
 					res, err := openaiClient.CreateChatCompletion(ctx, openai.ChatCompletionRequest{
 						Model: utils.GetConfigString("openai.model"),
@@ -116,6 +118,8 @@ Business Description:
 								Content: string(fileContent),
 							},
 						},
+						Temperature: 0.2,
+						Seed:        &seed,
 					})
 					if err != nil {
 						fmt.Println("Error:", err)
